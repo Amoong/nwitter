@@ -1,7 +1,7 @@
 import { authService, dbService } from "fbase";
 import React, { useState, useEffect } from "react";
 
-const Profile = ({ userObj, history }) => {
+const Profile = ({ userObj, history, refreshUser }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
 
   const onLogOutLick = () => {
@@ -9,14 +9,14 @@ const Profile = ({ userObj, history }) => {
     history.push("/");
   };
 
-  const onChnage = (event) => {
+  const onChnage = event => {
     const {
       target: { value },
     } = event;
     setNewDisplayName(value);
   };
 
-  const onSubmit = async (event) => {
+  const onSubmit = async event => {
     event.preventDefault();
     if (userObj.displayName === newDisplayName) {
       return;
@@ -25,6 +25,7 @@ const Profile = ({ userObj, history }) => {
     await userObj.updateProfile({
       displayName: newDisplayName,
     });
+    refreshUser();
   };
 
   const getMyNweets = async () => {
@@ -34,7 +35,7 @@ const Profile = ({ userObj, history }) => {
       .orderBy("createdAt")
       .get();
 
-    nweets.docs.map((doc) => console.log(doc.data()));
+    nweets.docs.map(doc => console.log(doc.data()));
   };
 
   useEffect(() => {
