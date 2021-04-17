@@ -1,5 +1,5 @@
-import { authService } from "fbase";
-import React, { useState } from "react";
+import { authService, dbService } from "fbase";
+import React, { useState, useEffect } from "react";
 
 const Profile = ({ userObj, history }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -26,6 +26,20 @@ const Profile = ({ userObj, history }) => {
       displayName: newDisplayName,
     });
   };
+
+  const getMyNweets = async () => {
+    const nweets = await dbService
+      .collection("nweets")
+      .where("creatorId", "==", userObj.uid)
+      .orderBy("createdAt")
+      .get();
+
+    nweets.docs.map((doc) => console.log(doc.data()));
+  };
+
+  useEffect(() => {
+    getMyNweets();
+  }, []);
 
   return (
     <>
