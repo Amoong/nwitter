@@ -6,6 +6,7 @@ function App() {
   const [init, setInit] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(authService.currentUser);
   const [userObj, setUserObj] = useState(null);
+
   useEffect(() => {
     authService.onAuthStateChanged(user => {
       if (user) {
@@ -17,6 +18,11 @@ function App() {
         });
       } else {
         setIsLoggedIn(false);
+        setUserObj({
+          displayName: "",
+          uid: "",
+          updateProfile: () => {},
+        });
       }
       setInit(true);
     });
@@ -24,11 +30,14 @@ function App() {
 
   const refreshUser = () => {
     const user = authService.currentUser;
-    setUserObj({
-      displayName: user.displayName,
-      uid: user.uid,
-      updateProfile: args => user.updateProfile(args),
-    });
+
+    if (user) {
+      setUserObj({
+        displayName: user.displayName,
+        uid: user.uid,
+        updateProfile: args => user.updateProfile(args),
+      });
+    }
   };
 
   return (

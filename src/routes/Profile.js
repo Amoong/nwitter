@@ -1,5 +1,6 @@
 import { authService, dbService } from "fbase";
 import React, { useState, useEffect } from "react";
+import { withRouter } from "react-router-dom";
 
 const Profile = ({ userObj, history, refreshUser }) => {
   const [newDisplayName, setNewDisplayName] = useState(userObj.displayName);
@@ -58,4 +59,4 @@ const Profile = ({ userObj, history, refreshUser }) => {
   );
 };
 
-export default Profile;
+export default withRouter(Profile);
